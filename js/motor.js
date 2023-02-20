@@ -39,6 +39,7 @@ function subirFichero1(form1, boton1, controlador1, divResultado1)
     ajaxFileUpload1(form1, controlador1, divResultado1);
     //alert("Mensaje 2");
     habilitarControl1(boton1);
+    form1.reset();
     // form1.
 }
 
