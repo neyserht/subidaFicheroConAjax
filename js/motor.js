@@ -1,22 +1,45 @@
-function peticionServidor1(c1, d1, servidor1)
+function deshabilitarControl1(control1)
 {
+    control1.disabled = true;
+}
+
+function habilitarControl1(control1)
+{
+    control1.disabled = false;
+}
+
+function ajaxFileUpload1(form1, controlador1, div1){
+
     let ajax1 = new XMLHttpRequest();
+    let formData1 = new FormData(form1);
+    formData1.append("InformacionAdicional1", "Informacion Adicional");
 
     ajax1.onreadystatechange = function(){
-        if(ajax1.readyState==4 && ajax1.status==200)
+        if(ajax1.readyState==4)
+        // && ajax1.status==200
         {
-            c1.value="";
-            document.getElementById(d1.id).innerHTML = ajax1.responseText;
+            document.getElementById(div1.id).innerHTML = ajax1.responseText;
         }
         else
         {
-            c1.value="";
-            document.getElementById(d1.id).innerHTML = "La petición no se ha podido procesar";
+            document.getElementById(div1.id).innerHTML = "Error: no se ha podido enviar el fichero(" + ajax1.status +")";
         }
     };
-    let argumentos = "?c1=" + c1.value;
-    ajax1.open('GET', servidor1 + argumentos, true);
-    ajax1.send();
+
+    ajax1.open('POST', controlador1, true);
+    ajax1.send(formData1);
+
+}
+
+
+function subirFichero1(form1, boton1, controlador1, divResultado1)
+{
+    //alert("Mensaje 1");
+    deshabilitarControl1(boton1);
+    ajaxFileUpload1(form1, controlador1, divResultado1);
+    //alert("Mensaje 2");
+    habilitarControl1(boton1);
+    // form1.
 }
 
 
@@ -24,18 +47,21 @@ function peticionServidor1(c1, d1, servidor1)
 window.addEventListener("load", function(event){
 
     // Establecer una referencia de los elementos
-    const c1 = document.getElementById("c1");
-    const d1 = document.getElementById("d1");
-    const b1 = document.getElementById("b1");
-    let servidor1 = "";
+    const form1 = document.getElementById("form1");
 
     // Asociar el elemento al evento y llamada a la función
-    if(b1)
+    if(form1)
     {
-        b1.addEventListener("click", function(event){
+        
+        const divResultado1 = document.getElementById("divResultado1");
+        const boton1 = document.getElementById("boton1");
+        let controlador1 = "controllers/subir-fichero.php";
+        // const controlador1 = document.getElementById("controllers/subir-fichero.php");
+        // const controlador1 = document.getElementById("controllers/subir-fichero.php");
+
+        form1.addEventListener("submit", function(event){
             event.preventDefault();
-            servidor1 = "servidor.php";
-            peticionServidor1(c1, d1, servidor1);
+            subirFichero1(form1, boton1, controlador1, divResultado1);
         });
     }
 
